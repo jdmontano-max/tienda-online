@@ -1,69 +1,56 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soporte - Dev Tycoon</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <title>Soporte</title>
+    <link rel="stylesheet" href="../styles/main.css">
 </head>
-
 <body>
-  <header>
-    <h1>🛒 DevTycoon: E-Commerce</h1>
-    <div class="stats-bar">
-      <div>Capital: <span id="global-cash" class="stat">$1,000</span></div>
-      <div>Reputación: <span id="global-rep" class="stat">100%</span></div>
-      <div id="auth-status-indicator" class="auth-badge">Ruta Protegida</div>
-    </div>
-  </header>
 
-  <div class="main-container">
+<header>
+    <h1>🎮 GameStore</h1>
     <nav>
-      <h3>Rutas Públicas</h3>
-      <a href="index.html" class="nav-btn">🏠 Home</a>
-      <a href="productos.html" class="nav-btn">📦 Catálogo (Productos)</a>
-      <a href="carrito.html" class="nav-btn">🛒 Carrito/Checkout <span id="order-count" class="badge-count">0</span></a>
-
-      <h3 style="margin-top: 1.5rem;">Rutas Protegidas</h3>
-      <a href="perfil.html" class="nav-btn">👤 Perfil Admin 🔒</a>
-      <a href="soporte.html" class="nav-btn active">🛠️ Soporte Técnico 🔒</a>
+        <a href="../index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="carrito.html">Carrito</a>
+        <a href="perfil.html">Perfil</a>
     </nav>
+</header>
 
-    <div class="content">
-      <div id="auth-gate" class="login-box card">
-        <h2>🔒 Acceso Restringido a Soporte</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Debes loguearte primero en la
-          pestaña de Perfil Admin para ver esta ruta.</p>
-        <a href="perfil.html" class="btn">Ir a Iniciar Sesión</a>
-      </div>
+<section class="soporte-container">
 
-      <div id="secure-content" style="display: none;">
-        <h2>🛠️ Mesa de Soporte Técnico Integrado</h2>
-        <div class="card">
-          <h3>Logs del Sistema Arquitectónico</h3>
-          <p
-            style="color: var(--text-muted); font-family: monospace; background: #0f172a; padding: 1rem; border-radius: 6px; margin-top: 1rem;">
-            [INFO] Middleware de Autenticación inicializado con éxito.<br>
-            [SUCCESS] LocalStorage sincronizado globalmente.<br>
-            [STATUS] Simulación de E-Commerce corriendo del putas...
-          </p>
+    <div class="soporte-card">
+
+        <h2>Centro de Soporte</h2>
+        <p class="descripcion">¿Tienes algún problema? Escríbenos y te ayudaremos lo más rápido posible.</p>
+
+        <!-- FORMULARIO -->
+        <form class="soporte-form">
+            <input type="text" placeholder="Nombre completo" required>
+            <input type="email" placeholder="Correo electrónico" required>
+
+            <select required>
+                <option value="">Selecciona un problema</option>
+                <option>Problema con compra</option>
+                <option>No puedo iniciar sesión</option>
+                <option>Error en el juego</option>
+                <option>Otro</option>
+            </select>
+
+            <textarea placeholder="Describe tu problema..." rows="4"></textarea>
+
+            <button type="submit">Enviar solicitud</button>
+        </form>
+
+        <!-- CONTACTO -->
+        <div class="contacto">
+            <p>📧 soporte@gamestore.com</p>
+            <p>📞 +593 999 999 999</p>
         </div>
-      </div>
+
     </div>
-  </div>
 
-  <script>
-    window.onload = function () {
-      const isAuth = localStorage.getItem('isAuthenticated') === 'true';
-      if (isAuth) {
-        document.getElementById('auth-gate').style.display = 'none';
-        document.getElementById('secure-content').style.display = 'block';
-      }
-      document.getElementById('global-cash').innerText = `$${localStorage.getItem('cash')}`;
-      document.getElementById('order-count').innerText = JSON.parse(localStorage.getItem('pendingOrders') || '[]').length;
-    };
-  </script>
+</section>
+
 </body>
-
 </html>

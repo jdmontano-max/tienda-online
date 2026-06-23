@@ -1,93 +1,88 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catálogo - Dev Tycoon</title>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <title>Productos</title>
+    <link rel="stylesheet" href="../styles/main.css">
 </head>
-
 <body>
-  <header>
-    <h1>🛒 DevTycoon: E-Commerce</h1>
-    <div class="stats-bar">
-      <div>Capital: <span id="global-cash" class="stat">$1,000</span></div>
-      <div>Reputación: <span id="global-rep" class="stat">100%</span></div>
-      <div id="auth-status-indicator" class="auth-badge">Ruta Pública</div>
-    </div>
-  </header>
 
-  <div class="main-container">
+<header>
+    <h1>🎮 GameStore</h1>
     <nav>
-      <h3>Rutas Públicas</h3>
-      <a href="index.html" class="nav-btn">🏠 Home</a>
-      <a href="productos.html" class="nav-btn active">📦 Catálogo (Productos)</a>
-      <a href="carrito.html" class="nav-btn">🛒 Carrito/Checkout <span id="order-count" class="badge-count">0</span></a>
-
-      <h3 style="margin-top: 1.5rem;">Rutas Protegidas</h3>
-      <a href="perfil.html" class="nav-btn">👤 Perfil Admin 🔒</a>
-      <a href="soporte.html" class="nav-btn">🛠️ Soporte Técnico 🔒</a>
+        <a href="../index.html">Inicio</a>
+        <a href="carrito.html">Carrito</a>
+        <a href="perfil.html">Perfil</a>
     </nav>
+</header>
 
-    <div class="content">
-      <h2>📦 Catálogo de Productos (Público)</h2>
-      <div class="grid-3" id="catalog-container">
-      </div>
+<section class="productos">
+
+    <!-- JUEGO 1 -->
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6">
+        <h3>FIFA 24</h3>
+        <p>$60</p>
+        <button>Agregar</button>
     </div>
-  </div>
 
-  <script>
-    const productsBase = [
-      { id: 0, name: "Plan de Suscripción Ultra", basePrice: 150, baseUpgrade: 300 },
-      { id: 1, name: "Módulo API Premium", basePrice: 45, baseUpgrade: 100 },
-      { id: 2, name: "Asset CSS Ciberpunk", basePrice: 15, baseUpgrade: 40 }
-    ];
+    <!-- JUEGO 2 -->
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf">
+        <h3>Call of Duty</h3>
+        <p>$70</p>
+        <button>Agregar</button>
+    </div>
 
-    function renderCatalog() {
-      let cash = parseInt(localStorage.getItem('cash') || '1000');
-      const container = document.getElementById('catalog-container');
-      container.innerHTML = '';
+    <!-- JUEGO 3 -->
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437d1">
+        <h3>Spider-Man 2</h3>
+        <p>$65</p>
+        <button>Agregar</button>
+    </div>
 
-      productsBase.forEach(p => {
-        let lvl = parseInt(localStorage.getItem(`prod_${p.id}_lvl`) || '1');
-        let currentVal = p.basePrice * lvl;
-        let upgradeCost = Math.floor(p.baseUpgrade * Math.pow(1.7, lvl - 1));
+    <!-- JUEGO 4 -->
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420">
+        <h3>God of War</h3>
+        <p>$55</p>
+        <button>Agregar</button>
+    </div>
 
-        container.innerHTML += `
-                    <div class="card product-card">
-                        <div>
-                            <h3>${p.name}</h3>
-                            <p style="color:var(--accent); font-size:1.3rem; margin:0.5rem 0;">Valor de Venta: $${currentVal}</p>
-                            <p style="color:var(--text-muted); font-size:0.85rem;">Nivel de optimización SEO: ${lvl}</p>
-                        </div>
-                        <button class="btn" onclick="upgradeProduct(${p.id}, ${upgradeCost})">Optimizar e-Commerce ($${upgradeCost})</button>
-                    </div>`;
-      });
+    <!-- JUEGO 5 -->
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e">
+        <h3>Fortnite</h3>
+        <p>$0</p>
+        <button>Agregar</button>
+    </div>
 
-      document.getElementById('global-cash').innerText = `$${cash}`;
-      document.getElementById('order-count').innerText = JSON.parse(localStorage.getItem('pendingOrders') || '[]').length;
-    }
+    <!-- JUEGO 6 -->
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7">
+        <h3>GTA V</h3>
+        <p>$40</p>
+        <button>Agregar</button>
+    </div>
 
-    function upgradeProduct(id, cost) {
-      let cash = parseInt(localStorage.getItem('cash') || '1000');
-      if (cash >= cost) {
-        cash -= cost;
-        localStorage.setItem('cash', cash.toString());
+    <!-- JUEGO 7 -->
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd">
+        <h3>Minecraft</h3>
+        <p>$30</p>
+        <button>Agregar</button>
+    </div>
 
-        let lvl = parseInt(localStorage.getItem(`prod_${id}_lvl`) || '1');
-        localStorage.setItem(`prod_${id}_lvl`, (lvl + 1).toString());
+    <!-- JUEGO 8 -->
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1590608897129-79da98d15969">
+        <h3>The Last of Us</h3>
+        <p>$50</p>
+        <button>Agregar</button>
+    </div>
 
-        confetti({ particleCount: 30, spread: 60 });
-        renderCatalog();
-      } else {
-        alert("¡No tienes suficiente capital corporativo!");
-      }
-    }
+</section>
 
-    window.onload = renderCatalog;
-  </script>
 </body>
-
 </html>
