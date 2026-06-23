@@ -1,50 +1,86 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carrito | Mapa de navegación</title>
-  <link rel="stylesheet" href="../styles/main.css">
+  <title>Carrito y Checkout - Dev Tycoon</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-  <main class="site">
-    <header class="hero">
-      <p class="eyebrow">Sección separada</p>
-      <h1>Carrito</h1>
-      <p class="lead">Esta rama separa la revisión de artículos del cierre del proceso de compra.</p>
-    </header>
+  <header>
+    <h1>🛒 DevTycoon: E-Commerce</h1>
+    <div class="stats-bar">
+      <div>Capital: <span id="global-cash" class="stat">$1,000</span></div>
+      <div>Reputación: <span id="global-rep" class="stat">100%</span></div>
+      <div id="auth-status-indicator" class="auth-badge">Ruta Pública</div>
+    </div>
+  </header>
 
-    <section class="page-shell">
-      <aside class="panel sidebar-panel">
-        <h2>Ruta</h2>
-        <ul class="tree">
-          <li>
-            <a class="node" href="../index.html">Inicio</a>
-            <ul>
-              <li><span class="node node-root">Carrito</span></li>
-            </ul>
-          </li>
-        </ul>
-        <a class="back-link" href="../index.html">Volver al inicio</a>
-      </aside>
+  <div class="main-container">
+    <nav>
+      <h3>Rutas Públicas</h3>
+      <a href="index.html" class="nav-btn">🏠 Home</a>
+      <a href="productos.html" class="nav-btn">📦 Catálogo (Productos)</a>
+      <a href="carrito.html" class="nav-btn active">🛒 Carrito/Checkout <span id="order-count"
+          class="badge-count">0</span></a>
 
-      <section class="panel page-content" aria-label="Contenido del carrito">
-        <p class="breadcrumb">Inicio / Carrito</p>
-        <h2>Proceso de compra</h2>
-        <p>Separar estas dos vistas permite explicar la navegación entre revisión de pedido y confirmación.</p>
+      <h3 style="margin-top: 1.5rem;">Rutas Protegidas</h3>
+      <a href="perfil.html" class="nav-btn">👤 Perfil Admin 🔒</a>
+      <a href="soporte.html" class="nav-btn">🛠️ Soporte Técnico 🔒</a>
+    </nav>
 
-        <div class="branch-grid">
-          <articlhref="pages/productos.html"e class="card" id="resumen">
-            <h3>Resumen</h3>
-            <p>Reúne los productos seleccionados, cantidades y total estimado antes de pagar.</p>
-          </article>
-          <article class="card" id="checkout">
-            <h3>Checkout</h3>
-            <p>Contiene el formulario de envío, facturación y confirmación final de la compra.</p>
-          </article>
-        </div>
-      </section>
-    </section>
-  </main>
+    <div class="content">
+      <h2>🛒 Checkout Express & Cola de Carritos</h2>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">Los clientes están enviando intenciones de compra.
+        Procésalas rápido para ganar dinero.</p>
+      <div id="orders-container"></div>
+    </div>
+  </div>
+
+  <script>
+    function renderOrders() {
+      const container = document.getElementById('orders-container');
+      const orders = JSON.parse(localStorage.getItem('pendingOrders') || '[]');
+
+      document.getElementById('global-cash').innerText = `$${localStorage.getItem('cash')}`;
+      document.getElementById('order-count').innerText = orders.length;
+
+      if (orders.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-muted);">No hay transacciones pendientes en la pasarela de pagos...</p>';
+        return;
+      }
+
+      container.innerHTML = '';
+      orders.forEach((order, index) => {
+        container.innerHTML += `
+                    <div class="order-row">
+                        <div>
+                            <strong>Orden #${order.id}</strong><br>
+                            <span style="font-size:0.85rem; color:var(--text-muted)">Producto: ${order.name}</span>
+                        </div>
+                        <button class="btn" style="background-color: var(--success)" onclick="processCheckout(${index})">Autorizar Pago (+$${order.payout})</button>
+                    </div>`;
+      });
+    }
+
+    function processCheckout(index) {
+      const orders = JSON.parse(localStorage.getItem('pendingOrders') || '[]');
+      const processed = orders.splice(index, 1)[0];
+
+      let cash = parseInt(localStorage.getItem('cash') || '1000');
+      cash += processed.payout;
+
+      localStorage.setItem('cash', cash.toString());
+      localStorage.setItem('pendingOrders', JSON.stringify(orders));
+
+      renderOrders();
+    }
+
+    window.onload = renderOrders;
+    setInterval(renderOrders, 2000); // Autorefrescar órdenes entrantes
+  </script>
 </body>
+
 </html>

@@ -1,50 +1,93 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Productos | Mapa de navegación</title>
-  <link rel="stylesheet" href="../styles/main.css">
+  <title>Catálogo - Dev Tycoon</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-  <main class="site">
-    <header class="hero">
-      <p class="eyebrow">Sección separada</p>
-      <h1>Productos</h1>
-      <p class="lead">Esta página agrupa la navegación del catálogo en dos responsabilidades: categorías y detalle de producto.</p>
-    </header>
+  <header>
+    <h1>🛒 DevTycoon: E-Commerce</h1>
+    <div class="stats-bar">
+      <div>Capital: <span id="global-cash" class="stat">$1,000</span></div>
+      <div>Reputación: <span id="global-rep" class="stat">100%</span></div>
+      <div id="auth-status-indicator" class="auth-badge">Ruta Pública</div>
+    </div>
+  </header>
 
-    <section class="page-shell">
-      <aside class="panel sidebar-panel">
-        <h2>Ruta</h2>
-        <ul class="tree">
-          <li>
-            <a class="node" href="../index.html">Inicio</a>
-            <ul>
-              <li><span class="node node-root">Productos</span></li>
-            </ul>
-          </li>
-        </ul>
-        <a class="back-link" href="../index.html">Volver al inicio</a>
-      </aside>
+  <div class="main-container">
+    <nav>
+      <h3>Rutas Públicas</h3>
+      <a href="index.html" class="nav-btn">🏠 Home</a>
+      <a href="productos.html" class="nav-btn active">📦 Catálogo (Productos)</a>
+      <a href="carrito.html" class="nav-btn">🛒 Carrito/Checkout <span id="order-count" class="badge-count">0</span></a>
 
-      <section class="panel page-content" aria-label="Contenido de productos">
-        <p class="breadcrumb">Inicio / Productos</p>
-        <h2>Contenido del catálogo</h2>
-        <p>Las subpáginas del catálogo se mantienen separadas para que cada bloque tenga una función clara.</p>
+      <h3 style="margin-top: 1.5rem;">Rutas Protegidas</h3>
+      <a href="perfil.html" class="nav-btn">👤 Perfil Admin 🔒</a>
+      <a href="soporte.html" class="nav-btn">🛠️ Soporte Técnico 🔒</a>
+    </nav>
 
-        <div class="branch-grid">
-          <article class="card" id="categorias">
-            <h3>Categorías</h3>
-            <p>Organiza los productos por tipo, colección o uso. Es la puerta de entrada al catálogo.</p>
-          </article>
-          <article class="card" id="detalle-producto">
-            <h3>Detalle de Producto</h3>
-            <p>Presenta la ficha individual con información específica, precio y acciones de compra.</p>
-          </article>
-        </div>
-      </section>
-    </section>
-  </main>
+    <div class="content">
+      <h2>📦 Catálogo de Productos (Público)</h2>
+      <div class="grid-3" id="catalog-container">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const productsBase = [
+      { id: 0, name: "Plan de Suscripción Ultra", basePrice: 150, baseUpgrade: 300 },
+      { id: 1, name: "Módulo API Premium", basePrice: 45, baseUpgrade: 100 },
+      { id: 2, name: "Asset CSS Ciberpunk", basePrice: 15, baseUpgrade: 40 }
+    ];
+
+    function renderCatalog() {
+      let cash = parseInt(localStorage.getItem('cash') || '1000');
+      const container = document.getElementById('catalog-container');
+      container.innerHTML = '';
+
+      productsBase.forEach(p => {
+        let lvl = parseInt(localStorage.getItem(`prod_${p.id}_lvl`) || '1');
+        let currentVal = p.basePrice * lvl;
+        let upgradeCost = Math.floor(p.baseUpgrade * Math.pow(1.7, lvl - 1));
+
+        container.innerHTML += `
+                    <div class="card product-card">
+                        <div>
+                            <h3>${p.name}</h3>
+                            <p style="color:var(--accent); font-size:1.3rem; margin:0.5rem 0;">Valor de Venta: $${currentVal}</p>
+                            <p style="color:var(--text-muted); font-size:0.85rem;">Nivel de optimización SEO: ${lvl}</p>
+                        </div>
+                        <button class="btn" onclick="upgradeProduct(${p.id}, ${upgradeCost})">Optimizar e-Commerce ($${upgradeCost})</button>
+                    </div>`;
+      });
+
+      document.getElementById('global-cash').innerText = `$${cash}`;
+      document.getElementById('order-count').innerText = JSON.parse(localStorage.getItem('pendingOrders') || '[]').length;
+    }
+
+    function upgradeProduct(id, cost) {
+      let cash = parseInt(localStorage.getItem('cash') || '1000');
+      if (cash >= cost) {
+        cash -= cost;
+        localStorage.setItem('cash', cash.toString());
+
+        let lvl = parseInt(localStorage.getItem(`prod_${id}_lvl`) || '1');
+        localStorage.setItem(`prod_${id}_lvl`, (lvl + 1).toString());
+
+        confetti({ particleCount: 30, spread: 60 });
+        renderCatalog();
+      } else {
+        alert("¡No tienes suficiente capital corporativo!");
+      }
+    }
+
+    window.onload = renderCatalog;
+  </script>
 </body>
+
 </html>

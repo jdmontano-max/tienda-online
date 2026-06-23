@@ -1,50 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soporte | Mapa de navegación</title>
-  <link rel="stylesheet" href="../styles/main.css">
+  <title>Soporte - Dev Tycoon</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-  <main class="site">
-    <header class="hero">
-      <p class="eyebrow">Sección separada</p>
-      <h1>Soporte</h1>
-      <p class="lead">La ayuda se separa en preguntas frecuentes y un canal directo de contacto.</p>
-    </header>
+  <header>
+    <h1>🛒 DevTycoon: E-Commerce</h1>
+    <div class="stats-bar">
+      <div>Capital: <span id="global-cash" class="stat">$1,000</span></div>
+      <div>Reputación: <span id="global-rep" class="stat">100%</span></div>
+      <div id="auth-status-indicator" class="auth-badge">Ruta Protegida</div>
+    </div>
+  </header>
 
-    <section class="page-shell">
-      <aside class="panel sidebar-panel">
-        <h2>Ruta</h2>
-        <ul class="tree">
-          <li>
-            <a class="node" href="../index.html">Inicio</a>
-            <ul>
-              <li><span class="node node-root">Soporte</span></li>
-            </ul>
-          </li>
-        </ul>
-        <a class="back-link" href="../index.html">Volver al inicio</a>
-      </aside>
+  <div class="main-container">
+    <nav>
+      <h3>Rutas Públicas</h3>
+      <a href="index.html" class="nav-btn">🏠 Home</a>
+      <a href="productos.html" class="nav-btn">📦 Catálogo (Productos)</a>
+      <a href="carrito.html" class="nav-btn">🛒 Carrito/Checkout <span id="order-count" class="badge-count">0</span></a>
 
-      <section class="panel page-content" aria-label="Contenido de soporte">
-        <p class="breadcrumb">Inicio / Soporte</p>
-        <h2>Ayuda y contacto</h2>
-        <p>Esta división evita mezclar respuestas generales con solicitudes que requieren atención directa.</p>
+      <h3 style="margin-top: 1.5rem;">Rutas Protegidas</h3>
+      <a href="perfil.html" class="nav-btn">👤 Perfil Admin 🔒</a>
+      <a href="soporte.html" class="nav-btn active">🛠️ Soporte Técnico 🔒</a>
+    </nav>
 
-        <div class="branch-grid">
-          <article class="card" id="faq">
-            <h3>FAQ</h3>
-            <p>Resuelve dudas comunes sin necesidad de intervención directa del equipo de soporte.</p>
-          </article>
-          <article class="card" id="contacto">
-            <h3>Contacto</h3>
-            <p>Canal para consultas específicas, incidencias o solicitudes que requieren seguimiento.</p>
-          </article>
+    <div class="content">
+      <div id="auth-gate" class="login-box card">
+        <h2>🔒 Acceso Restringido a Soporte</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Debes loguearte primero en la
+          pestaña de Perfil Admin para ver esta ruta.</p>
+        <a href="perfil.html" class="btn">Ir a Iniciar Sesión</a>
+      </div>
+
+      <div id="secure-content" style="display: none;">
+        <h2>🛠️ Mesa de Soporte Técnico Integrado</h2>
+        <div class="card">
+          <h3>Logs del Sistema Arquitectónico</h3>
+          <p
+            style="color: var(--text-muted); font-family: monospace; background: #0f172a; padding: 1rem; border-radius: 6px; margin-top: 1rem;">
+            [INFO] Middleware de Autenticación inicializado con éxito.<br>
+            [SUCCESS] LocalStorage sincronizado globalmente.<br>
+            [STATUS] Simulación de E-Commerce corriendo del putas...
+          </p>
         </div>
-      </section>
-    </section>
-  </main>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function () {
+      const isAuth = localStorage.getItem('isAuthenticated') === 'true';
+      if (isAuth) {
+        document.getElementById('auth-gate').style.display = 'none';
+        document.getElementById('secure-content').style.display = 'block';
+      }
+      document.getElementById('global-cash').innerText = `$${localStorage.getItem('cash')}`;
+      document.getElementById('order-count').innerText = JSON.parse(localStorage.getItem('pendingOrders') || '[]').length;
+    };
+  </script>
 </body>
+
 </html>

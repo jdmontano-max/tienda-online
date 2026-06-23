@@ -1,50 +1,84 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Perfil de Usuario | Mapa de navegación</title>
-  <link rel="stylesheet" href="../styles/main.css">
+  <title>Perfil Admin - Dev Tycoon</title>
+ <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-  <main class="site">
-    <header class="hero">
-      <p class="eyebrow">Sección separada</p>
-      <h1>Perfil de Usuario</h1>
-      <p class="lead">La cuenta del usuario también se divide en responsabilidades pequeñas y fáciles de mantener.</p>
-    </header>
+  <header>
+    <h1>🛒 DevTycoon: E-Commerce</h1>
+    <div class="stats-bar">
+      <div>Capital: <span id="global-cash" class="stat">$1,000</span></div>
+      <div>Reputación: <span id="global-rep" class="stat">100%</span></div>
+      <div id="auth-status-indicator" class="auth-badge">Ruta Protegida</div>
+    </div>
+  </header>
 
-    <section class="page-shell">
-      <aside class="panel sidebar-panel">
-        <h2>Ruta</h2>
-        <ul class="tree">
-          <li>
-            <a class="node" href="../index.html">Inicio</a>
-            <ul>
-              <li><span class="node node-root">Perfil de Usuario</span></li>
-            </ul>
-          </li>
-        </ul>
-        <a class="back-link" href="../index.html">Volver al inicio</a>
-      </aside>
+  <div class="main-container">
+    <nav>
+      <h3>Rutas Públicas</h3>
+      <a href="index.html" class="nav-btn">🏠 Home</a>
+      <a href="productos.html" class="nav-btn">📦 Catálogo (Productos)</a>
+      <a href="carrito.html" class="nav-btn">🛒 Carrito/Checkout <span id="order-count" class="badge-count">0</span></a>
 
-      <section class="panel page-content" aria-label="Contenido del perfil">
-        <p class="breadcrumb">Inicio / Perfil de Usuario</p>
-        <h2>Área de cuenta</h2>
-        <p>Las opciones de historial y configuración se tratan como páginas separadas para no mezclar funciones.</p>
+      <h3 style="margin-top: 1.5rem;">Rutas Protegidas</h3>
+      <a href="perfil.html" class="nav-btn active">👤 Perfil Admin 🔒</a>
+      <a href="soporte.html" class="nav-btn">🛠️ Soporte Técnico 🔒</a>
+    </nav>
 
-        <div class="branch-grid">
-          <article class="card" id="mis-pedidos">
-            <h3>Mis pedidos</h3>
-            <p>Lista de compras realizadas, estados de envío y acceso al historial del usuario.</p>
-          </article>
-          <article class="card" id="configuracion">
-            <h3>Configuración</h3>
-            <p>Ajustes de perfil, contraseña, idioma y preferencias generales de la cuenta.</p>
-          </article>
+    <div class="content">
+      <div id="auth-gate" class="login-box card">
+        <h2>🔒 Autenticación Requerida</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Ruta protegida por Token JWT
+          simulado.</p>
+        <label>Token / Clave de Desarrollador:</label>
+        <input type="password" id="auth-pass" value="admin123"
+          style="width: 100%; padding: 0.5rem; margin: 0.5rem 0 1rem; background: #111827; color: #fff; border: 1px solid #334155;">
+        <button class="btn" style="width:100%" onclick="loginAdmin()">Validar Token de Sesión</button>
+      </div>
+
+      <div id="secure-content" style="display: none;">
+        <h2>👤 Perfil Corporativo (Acceso Autorizado)</h2>
+        <div class="card">
+          <h3>Panel Confidencial del Administrador</h3>
+          <p style="margin: 1rem 0; color: var(--success); font-weight: bold;">✓ Cookie de sesión activa: Rol [ADMIN]
+          </p>
+          <button class="btn btn-danger" onclick="logoutAdmin()">Cerrar Sesión Corporativa</button>
         </div>
-      </section>
-    </section>
-  </main>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function checkAuth() {
+      const isAuth = localStorage.getItem('isAuthenticated') === 'true';
+      if (isAuth) {
+        document.getElementById('auth-gate').style.display = 'none';
+        document.getElementById('secure-content').style.display = 'block';
+      } else {
+        document.getElementById('auth-gate').style.display = 'block';
+        document.getElementById('secure-content').style.display = 'none';
+      }
+      document.getElementById('global-cash').innerText = `$${localStorage.getItem('cash')}`;
+      document.getElementById('order-count').innerText = JSON.parse(localStorage.getItem('pendingOrders') || '[]').length;
+    }
+
+    function loginAdmin() {
+      localStorage.setItem('isAuthenticated', 'true');
+      checkAuth();
+    }
+
+    function logoutAdmin() {
+      localStorage.setItem('isAuthenticated', 'false');
+      checkAuth();
+    }
+
+    window.onload = checkAuth;
+  </script>
 </body>
+
 </html>
